@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import ch.thewit.mrsynth.model.Note;
+
 public class NoteTest {
 
   @Test

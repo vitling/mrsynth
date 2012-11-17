@@ -1,4 +1,4 @@
-package ch.thewit.mrsynth.synth;
+package ch.thewit.mrsynth.model;
 
 public enum Note {
   C(0),
