@@ -24,5 +24,10 @@
       <artifactId>cascading-core</artifactId>
       <version>2.0.3</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>13.0</version>
+    </dependency>
   </dependencies>
 </project>

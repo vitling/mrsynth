@@ -9,14 +9,14 @@ import org.junit.Test;
 import ch.thewit.mrsynth.model.IndexedSample;
 import ch.thewit.mrsynth.model.Note;
 import ch.thewit.mrsynth.model.NoteDefinition;
-import ch.thewit.mrsynth.model.NoteShape;
+import ch.thewit.mrsynth.model.Envelope;
 import ch.thewit.mrsynth.model.Waveform;
 
 public class SynthesiserTest {
 
   @Test
   public void testOscillator() {
-    NoteDefinition noteDefinition = new NoteDefinition(Note.A, 0, new NoteShape(1000, 0, 1101, 0), Waveform.SINE);
+    NoteDefinition noteDefinition = new NoteDefinition(Note.A, 0, new Envelope(1000, 0, 1101, 0), Waveform.SINE);
     Synthesiser synth = new Synthesiser(44000);
     // List<IndexedSample> expected = new ArrayList<IndexedSample>();
     List<IndexedSample> actual = synth.synthesise(noteDefinition);
@@ -34,7 +34,7 @@ public class SynthesiserTest {
 
   @Test
   public void testEnvelope() {
-    NoteDefinition noteDefinition = new NoteDefinition(Note.A, 0, new NoteShape(1000, 20, 2000, 100), Waveform.FULL_ONE);
+    NoteDefinition noteDefinition = new NoteDefinition(Note.A, 0, new Envelope(1000, 20, 2000, 100), Waveform.FULL_ONE);
     Synthesiser synth = new Synthesiser(10000);
     List<IndexedSample> actual = synth.synthesise(noteDefinition);
 

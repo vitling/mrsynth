@@ -1,12 +1,12 @@
 package ch.thewit.mrsynth.model;
 
-public class NoteShape {
+public class Envelope {
   private final long startSample;
   private final long startFade;
   private final long endSample;
   private final long endFade;
 
-  public NoteShape(long startSample, long startFade, long endSample, long endFade) {
+  public Envelope(long startSample, long startFade, long endSample, long endFade) {
     super();
     this.startSample = startSample;
     this.startFade = startFade;

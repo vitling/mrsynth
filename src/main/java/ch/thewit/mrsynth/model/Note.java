@@ -24,4 +24,12 @@ public enum Note {
   public double getPitch(int octave) {
     return 440 * Math.pow(TWELFTH_ROOT_OF_TWO, (position - 9) + octave * 12);
   }
+
+  public static Note parse(String noteName) {
+    if (noteName.endsWith("#")) {
+      return valueOf(noteName.substring(0, 1).toUpperCase() + "S");
+    }
+    return valueOf(noteName.toUpperCase());
+
+  }
 }
