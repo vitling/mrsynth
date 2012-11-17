@@ -47,7 +47,8 @@ public class SynthFunction extends BaseOperation<Object> implements Function<Obj
     Waveform waveform = Waveform.valueOf(tuple.getString(6));
 
     double detune = Double.valueOf(tuple.getString(7));
-    return new NoteDefinition(note, octave, envelope, waveform, detune);
+    double volume = Double.valueOf(tuple.getString(8));
+    return new NoteDefinition(note, octave, envelope, waveform, detune, volume);
   }
 
   Tuple indexedSampleToTuple(IndexedSample sample) {
