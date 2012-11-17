@@ -34,7 +34,7 @@ public class SynthFunction extends BaseOperation<Object> implements Function<Obj
     }
   }
 
-  private NoteDefinition tupleToNoteDefinition(Tuple tuple) {
+  NoteDefinition tupleToNoteDefinition(Tuple tuple) {
     Note note = Note.parse(tuple.getString(0));
 
     int octave = Integer.valueOf(tuple.getString(1));
@@ -50,7 +50,7 @@ public class SynthFunction extends BaseOperation<Object> implements Function<Obj
     return new NoteDefinition(note, octave, envelope, waveform, detune);
   }
 
-  private Tuple indexedSampleToTuple(IndexedSample sample) {
+  Tuple indexedSampleToTuple(IndexedSample sample) {
     return new Tuple(sample.getIndex(), sample.getSample());
   }
 }
