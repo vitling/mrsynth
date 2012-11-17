@@ -22,6 +22,6 @@ public enum Note {
   }
 
   public double getPitch(int octave) {
-    return 440 * Math.pow(TWELFTH_ROOT_OF_TWO, (position - 9));
+    return 440 * Math.pow(TWELFTH_ROOT_OF_TWO, (position - 9) + octave * 12);
   }
 }
