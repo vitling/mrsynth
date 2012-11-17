@@ -17,4 +17,9 @@ public class IndexedSample {
     return sample;
   }
 
+  @Override
+  public String toString() {
+    return "IndexedSample [index=" + index + ", sample=" + sample + "]";
+  }
+
 }

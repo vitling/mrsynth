@@ -22,6 +22,14 @@ public enum Waveform {
     public double getValueFixedRange(double position) {
       return position < 0.5 ? -1 : 1;
     }
+  },
+  FULL_ONE {
+
+    @Override
+    public double getValueFixedRange(double position) {
+      return 1;
+    }
+
   };
 
   public abstract double getValueFixedRange(double position);
