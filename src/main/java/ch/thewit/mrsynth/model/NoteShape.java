@@ -30,4 +30,17 @@ public class NoteShape {
     return endFade;
   }
 
+  public double getVolume(int sampleIndex) {
+    if (sampleIndex < startSample || sampleIndex >= endSample) {
+      return 0;
+    }
+    if (sampleIndex < startSample + startFade) {
+      return (sampleIndex - startSample) / (double) startFade;
+    }
+    if (sampleIndex > endSample - endFade) {
+      return (-(sampleIndex - endSample)) / (double) endFade;
+    }
+    return 1;
+  }
+
 }
