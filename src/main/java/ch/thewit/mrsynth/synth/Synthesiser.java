@@ -22,7 +22,8 @@ public class Synthesiser implements Serializable {
       double secondsPosition = (i - note.getEnvelope().getStartSample()) / (double) sampleRate;
       double wave = note.getWaveform().getValue(secondsPosition * note.getFrequency());
       double scaledWave = wave * note.getEnvelope().getVolume(i) * note.getVolume();
-      result.add(new IndexedSample(i, scaledWave));
+      double pan = note.getPan();
+      result.add(new IndexedSample(i, scaledWave * (1 - pan), scaledWave * pan));
     }
     return result;
   }

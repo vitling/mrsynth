@@ -9,11 +9,11 @@ import org.apache.hadoop.fs.Path;
 import cascading.flow.Flow;
 import cascading.flow.FlowDef;
 import cascading.flow.hadoop.HadoopFlowConnector;
-import cascading.operation.aggregator.Sum;
+import cascading.pipe.Checkpoint;
 import cascading.pipe.Each;
-import cascading.pipe.Every;
-import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
+import cascading.pipe.assembly.AggregateBy;
+import cascading.pipe.assembly.SumBy;
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
@@ -25,18 +25,19 @@ import fm.last.commons.hadoop.io.HadoopDirReader;
 public class MrSynth {
 
   private static final Fields notationFields = new Fields("note", "octave", "startPos", "startFade", "endPos",
-      "endFade", "waveform", "detune", "volume");
-  private static final Fields sampleFields = new Fields("index", "sample");
+      "endFade", "waveform", "detune", "volume", "pan");
+  private static final Fields sampleFields = new Fields("index", "samplel", "sampler");
 
   public static void main(String[] args) throws IOException {
     String input = args[0];
-    int maxFactor = Integer.parseInt(args[1]);
+    int maxFactor = Integer.parseInt(args[2]);
+    String output = args[1];
     String intermediate = "/user/davidaw/mrsynth/intermediate";
 
     mapReduceSynth(input, intermediate, maxFactor);
     Reader hadoopReader = new HadoopDirReader.Builder(new Path(intermediate)).deleteOnClose().build();
 
-    new SampleConverter(hadoopReader).convert(new File("/home/davidaw/mrsynth/output.raw"));
+    new SampleConverter(hadoopReader).convert(new File(output));
   }
 
   private static void mapReduceSynth(String notationFile, String temporaryFile, int maxFactor) {
@@ -45,12 +46,20 @@ public class MrSynth {
     Pipe notation = new Pipe("notation");
     flowDef.addSource(notation, new Hfs(new TextDelimited(notationFields, "\t"), notationFile));
     Pipe massiveNotation = new Each(notation, Fields.ALL, new Massifier(maxFactor), Fields.SWAP);
+    massiveNotation = new Checkpoint(massiveNotation);
     Pipe synth = new Each(massiveNotation, Fields.ALL, new SynthFunction(), Fields.SWAP);
-    // Pipe summing = new SumBy(synth, new Fields("index"), new Fields("sample"), new Fields("sampleSum"), long.class);
-    Pipe summing = new GroupBy(synth, new Fields("index"));
-    summing = new Every(summing, new Fields("sample"), new Sum(new Fields("sample"), double.class), Fields.ALL);
+    SumBy sumLeft = new SumBy(new Fields("samplel"), new Fields("samplel_sum"), double.class);
+    SumBy sumRight = new SumBy(new Fields("sampler"), new Fields("sampler_sum"), double.class);
 
-    flowDef.addTailSink(summing, new Hfs(new TextDelimited(sampleFields, "\t"), temporaryFile));
+    Pipe summing = new AggregateBy(synth, new Fields("index"), sumLeft, sumRight);
+    // Pipe summing = new GroupBy(synth, new Fields("index"));
+    // summing = new Every(summing, new Fields("samplel"), new Sum(new Fields("samplel_sum"), double.class),
+    // Fields.ALL);
+    // summing = new Every(summing, new Fields("sampler"), new Sum(new Fields("sampler_sum"), double.class),
+    // Fields.ALL);
+
+    flowDef.addTailSink(summing, new Hfs(new TextDelimited(new Fields("index", "samplel_sum", "sampler_sum"), "\t"),
+        temporaryFile));
 
     HadoopFlowConnector flowConnector = new HadoopFlowConnector();
     Flow<?> flow = flowConnector.connect(flowDef);

@@ -7,6 +7,7 @@ public class NoteDefinition {
   private final Waveform waveform;
   private final double detune;
   private final double volume;
+  private final double pan;
 
   public NoteDefinition(Note note, int octave, Envelope envelope, Waveform waveform) {
     super();
@@ -16,9 +17,11 @@ public class NoteDefinition {
     this.waveform = waveform;
     detune = 0;
     volume = 1;
+    pan = 0.5;
   }
 
-  public NoteDefinition(Note note, int octave, Envelope envelope, Waveform waveform, double detune, double volume) {
+  public NoteDefinition(Note note, int octave, Envelope envelope, Waveform waveform, double detune, double volume,
+      double pan) {
     super();
     this.note = note;
     this.octave = octave;
@@ -26,6 +29,7 @@ public class NoteDefinition {
     this.waveform = waveform;
     this.detune = detune;
     this.volume = volume;
+    this.pan = pan;
   }
 
   public double getFrequency() {
@@ -48,4 +52,7 @@ public class NoteDefinition {
     return volume;
   }
 
+  public double getPan() {
+    return pan;
+  }
 }

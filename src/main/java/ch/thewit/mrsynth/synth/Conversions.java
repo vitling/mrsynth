@@ -22,10 +22,11 @@ public class Conversions {
 
     double detune = Double.valueOf(tuple.getString(7));
     double volume = Double.valueOf(tuple.getString(8));
-    return new NoteDefinition(note, octave, envelope, waveform, detune, volume);
+    double pan = Double.valueOf(tuple.getString(9));
+    return new NoteDefinition(note, octave, envelope, waveform, detune, volume, pan);
   }
 
   public static Tuple indexedSampleToTuple(IndexedSample sample) {
-    return new Tuple(sample.getIndex(), sample.getSample());
+    return new Tuple(sample.getIndex(), sample.getLSample(), sample.getRSample());
   }
 }

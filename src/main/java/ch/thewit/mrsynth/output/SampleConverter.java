@@ -6,9 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class SampleConverter {
 
@@ -23,9 +25,11 @@ public class SampleConverter {
     FileOutputStream os = new FileOutputStream(outputFile);
     String line;
     while ((line = reader.readLine()) != null) {
-      String sampleValue = Iterables.getLast(TAB_SPLITTER.split(line));
-      int sampleValueInt = (int) (Double.parseDouble(sampleValue) * Integer.MAX_VALUE * 0.1);
-      os.write(ByteBuffer.allocate(4).putInt(sampleValueInt).array());
+      List<String> sampleValues = Lists.newArrayList(Iterables.skip(TAB_SPLITTER.split(line), 1));
+      short sampleValueShortL = (short) (Double.parseDouble(sampleValues.get(0)) * Short.MAX_VALUE * 0.1);
+      short sampleValueShortR = (short) (Double.parseDouble(sampleValues.get(1)) * Short.MAX_VALUE * 0.1);
+      os.write(ByteBuffer.allocate(2).putShort(sampleValueShortL).array());
+      os.write(ByteBuffer.allocate(2).putShort(sampleValueShortR).array());
     }
     os.close();
     reader.close();

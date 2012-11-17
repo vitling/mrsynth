@@ -11,7 +11,7 @@ public class ConversionsTest {
 
   @Test
   public void testTupleToNoteDefinition() {
-    Tuple tuple = new Tuple("A", "0", "0", "10000", "100000", "10000", "PARTIAL_SAW", "0.0", "1");
+    Tuple tuple = new Tuple("A", "0", "0", "10000", "100000", "10000", "PARTIAL_SAW", "0.0", "1", "0.5");
     SynthFunction f = new SynthFunction();
 
     NoteDefinition nd = Conversions.tupleToNoteDefinition(tuple);

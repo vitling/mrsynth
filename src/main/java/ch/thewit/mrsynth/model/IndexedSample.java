@@ -2,24 +2,25 @@ package ch.thewit.mrsynth.model;
 
 public class IndexedSample {
   private final long index;
-  private final double sample;
+  private final double lsample;
+  private final double rsample;
 
-  public IndexedSample(long index, double sample) {
+  public IndexedSample(long index, double lsample, double rsample) {
     this.index = index;
-    this.sample = sample;
+    this.lsample = lsample;
+    this.rsample = rsample;
   }
 
   public long getIndex() {
     return index;
   }
 
-  public double getSample() {
-    return sample;
+  public double getLSample() {
+    return lsample;
   }
 
-  @Override
-  public String toString() {
-    return "IndexedSample [index=" + index + ", sample=" + sample + "]";
+  public double getRSample() {
+    return rsample;
   }
 
 }

@@ -16,7 +16,7 @@ public class SynthFunction extends BaseOperation<Object> implements Function<Obj
   private final Synthesiser synthesiser;
 
   public SynthFunction() {
-    super(8, new Fields("index", "sample"));
+    super(8, new Fields("index", "samplel", "sampler"));
     synthesiser = new Synthesiser(44100);
   }
 

@@ -20,7 +20,7 @@ public class SynthWriter {
         Waveform.PARTIAL_SAW);
     Synthesiser synth = new Synthesiser(44100);
     for (IndexedSample sample : synth.synthesise(noteDefinition)) {
-      int sampleValue = (int) (sample.getSample() * Integer.MAX_VALUE * 0.1);
+      int sampleValue = (int) (sample.getLSample() * Integer.MAX_VALUE * 0.1);
       byte[] sampleBytes = ByteBuffer.allocate(4).putInt(sampleValue).array();
       os.write(sampleBytes);
     }
