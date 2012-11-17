@@ -7,14 +7,14 @@ import org.junit.Test;
 import cascading.tuple.Tuple;
 import ch.thewit.mrsynth.model.NoteDefinition;
 
-public class SynthFunctionTest {
+public class ConversionsTest {
 
   @Test
   public void testTupleToNoteDefinition() {
-    Tuple tuple = new Tuple("A", "0", "0", "10000", "100000", "10000", "PARTIAL_SAW", "0.0");
+    Tuple tuple = new Tuple("A", "0", "0", "10000", "100000", "10000", "PARTIAL_SAW", "0.0", "1");
     SynthFunction f = new SynthFunction();
 
-    NoteDefinition nd = f.tupleToNoteDefinition(tuple);
+    NoteDefinition nd = Conversions.tupleToNoteDefinition(tuple);
 
     assertEquals(440, nd.getFrequency(), 0.001);
   }
