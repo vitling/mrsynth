@@ -3,6 +3,7 @@ package ch.thewit.mrsynth;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Properties;
 
 import org.apache.hadoop.fs.Path;
 
@@ -11,9 +12,12 @@ import cascading.flow.FlowDef;
 import cascading.flow.hadoop.HadoopFlowConnector;
 import cascading.pipe.Checkpoint;
 import cascading.pipe.Each;
+import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.AggregateBy;
 import cascading.pipe.assembly.SumBy;
+import cascading.property.AppProps;
+import cascading.scheme.Scheme;
 import cascading.scheme.hadoop.TextDelimited;
 import cascading.tap.hadoop.Hfs;
 import cascading.tuple.Fields;
@@ -47,21 +51,32 @@ public class MrSynth {
     flowDef.addSource(notation, new Hfs(new TextDelimited(notationFields, "\t"), notationFile));
     Pipe massiveNotation = new Each(notation, Fields.ALL, new Massifier(maxFactor), Fields.SWAP);
     massiveNotation = new Checkpoint(massiveNotation);
-    Pipe synth = new Each(massiveNotation, Fields.ALL, new SynthFunction(), Fields.SWAP);
+    Each synth = new Each(massiveNotation, Fields.ALL, new SynthFunction(), Fields.SWAP);
+    synth.getStepConfigDef().setProperty("mapred.map.tasks", "1000");
+    synth.getStepConfigDef().setProperty("mapred.min.split.size", "2048");
     SumBy sumLeft = new SumBy(new Fields("samplel"), new Fields("samplel_sum"), double.class);
     SumBy sumRight = new SumBy(new Fields("sampler"), new Fields("sampler_sum"), double.class);
 
-    Pipe summing = new AggregateBy(synth, new Fields("index"), sumLeft, sumRight);
+    AggregateBy summing = new AggregateBy(synth, new Fields("index"), sumLeft, sumRight);
+    Pipe checkpoint = new Checkpoint(summing);
+
     // Pipe summing = new GroupBy(synth, new Fields("index"));
     // summing = new Every(summing, new Fields("samplel"), new Sum(new Fields("samplel_sum"), double.class),
     // Fields.ALL);
     // summing = new Every(summing, new Fields("sampler"), new Sum(new Fields("sampler_sum"), double.class),
     // Fields.ALL);
 
-    flowDef.addTailSink(summing, new Hfs(new TextDelimited(new Fields("index", "samplel_sum", "sampler_sum"), "\t"),
+    Pipe finalSort = new GroupBy(checkpoint, new Fields("index"));
+
+    Scheme outputScheme = new TextDelimited(new Fields("index", "samplel_sum", "sampler_sum"), "\t");
+    outputScheme.setNumSinkParts(1);
+    flowDef.addTailSink(finalSort, new Hfs(outputScheme,
         temporaryFile));
 
-    HadoopFlowConnector flowConnector = new HadoopFlowConnector();
+    Properties properties = new Properties();
+    AppProps.setApplicationJarClass(properties, MrSynth.class);
+    properties.put("mapred.max.split.size", 1024);
+    HadoopFlowConnector flowConnector = new HadoopFlowConnector(properties);
     Flow<?> flow = flowConnector.connect(flowDef);
 
     flow.complete();
