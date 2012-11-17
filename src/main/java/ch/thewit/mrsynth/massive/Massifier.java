@@ -30,8 +30,8 @@ public class Massifier extends BaseOperation<Object> implements Function<Object>
       output.setString("detune", Double.toString(detune + Math.random() * 0.08 - 0.04));
       output.setString("volume", Double.toString(volume / maxFactor));
       output.setString("pan", Double.toString(Math.random()));
-      output.setString("startPos", Integer.toString((int) (startPos + Math.random() * 2000 - 1000)));
-      output.setString("endPos", Integer.toString((int) (endPos + Math.random() * 2000 - 1000)));
+      output.setString("startPos", Integer.toString((int) (startPos + Math.random() * 10000 - 5000)));
+      output.setString("endPos", Integer.toString((int) (endPos + Math.random() * 10000 - 5000)));
       System.out.println(Joiner.on(",").join(output.getTuple()));
       func.getOutputCollector().add(output);
     }
