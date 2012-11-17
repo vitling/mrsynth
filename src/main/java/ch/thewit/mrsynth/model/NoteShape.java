@@ -1,12 +1,12 @@
 package ch.thewit.mrsynth.model;
 
 public class NoteShape {
-  private final int startSample;
-  private final int startFade;
-  private final int endSample;
-  private final int endFade;
+  private final long startSample;
+  private final long startFade;
+  private final long endSample;
+  private final long endFade;
 
-  public NoteShape(int startSample, int startFade, int endSample, int endFade) {
+  public NoteShape(long startSample, long startFade, long endSample, long endFade) {
     super();
     this.startSample = startSample;
     this.startFade = startFade;
@@ -14,23 +14,23 @@ public class NoteShape {
     this.endFade = endFade;
   }
 
-  public int getStartSample() {
+  public long getStartSample() {
     return startSample;
   }
 
-  public int getStartFade() {
+  public long getStartFade() {
     return startFade;
   }
 
-  public int getEndSample() {
+  public long getEndSample() {
     return endSample;
   }
 
-  public int getEndFade() {
+  public long getEndFade() {
     return endFade;
   }
 
-  public double getVolume(int sampleIndex) {
+  public double getVolume(long sampleIndex) {
     if (sampleIndex < startSample || sampleIndex >= endSample) {
       return 0;
     }

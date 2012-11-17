@@ -1,6 +1,5 @@
 package ch.thewit.mrsynth.model;
 
-
 public class NoteDefinition {
   private final Note note;
   private final int octave;
@@ -31,7 +30,7 @@ public class NoteDefinition {
     return waveform;
   }
 
-  public int getLength() {
+  public long getLength() {
     return envelope.getEndSample() - envelope.getStartSample();
   }
 
