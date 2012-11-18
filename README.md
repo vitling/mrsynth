@@ -20,6 +20,7 @@ Takes tab-separated input like this:
     A   1   0   800000  2000000 700000  SINE    0.0 0.8 0.5
 
 Then processes through this:
+
 1. Massifier (Map): creates hundreds of copies of each note with subtle differences in timing, tuning, volume and panning.
 2. Synthesiser (Map): generates indexed waveform data from the note definitions, one "map" to each note (each map will output thousands of waveform tuples).
 3. Aggregator (Reduce): Sums the output for each waveform index.
