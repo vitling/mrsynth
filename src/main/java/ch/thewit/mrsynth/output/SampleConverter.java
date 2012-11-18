@@ -26,10 +26,10 @@ public class SampleConverter {
     String line;
     while ((line = reader.readLine()) != null) {
       List<String> sampleValues = Lists.newArrayList(Iterables.skip(TAB_SPLITTER.split(line), 1));
-      short sampleValueShortL = (short) (Double.parseDouble(sampleValues.get(0)) * Short.MAX_VALUE * 0.1);
-      short sampleValueShortR = (short) (Double.parseDouble(sampleValues.get(1)) * Short.MAX_VALUE * 0.1);
-      os.write(ByteBuffer.allocate(2).putShort(sampleValueShortL).array());
-      os.write(ByteBuffer.allocate(2).putShort(sampleValueShortR).array());
+      int sampleValueShortL = (int) (Double.parseDouble(sampleValues.get(0)) * Integer.MAX_VALUE * 0.1);
+      int sampleValueShortR = (int) (Double.parseDouble(sampleValues.get(1)) * Integer.MAX_VALUE * 0.1);
+      os.write(ByteBuffer.allocate(4).putInt(sampleValueShortL).array());
+      os.write(ByteBuffer.allocate(4).putInt(sampleValueShortR).array());
     }
     os.close();
     reader.close();
